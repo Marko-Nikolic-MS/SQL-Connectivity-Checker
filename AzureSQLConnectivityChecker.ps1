@@ -19,7 +19,7 @@ using namespace System.Diagnostics
 $Server = '.database.windows.net'
 $Database = ''  # Set the name of the database you wish to test, 'master' will be used by default if nothing is set
 $User = ''  # Set the login username yo wish to use, 'AzSQLConnCheckerUser' will be used by default if nothing is set
-$Password = ''  # Set the login password you wish to use, 'AzSQLConnCheckerPassword' will be used by default if nothing is set
+#If an user was set, the password will be asked during the execution
 
 # Optional parameters (default values will be used if ommited)
 $SendAnonymousUsageData = $true  # Set as $true (default) or $false
@@ -33,7 +33,6 @@ if ($null -ne $parameters) {
     $Server = $parameters['Server']
     $Database = $parameters['Database']
     $User = $parameters['User']
-    $Password = $parameters['Password']
     if ($null -ne $parameters['SendAnonymousUsageData']) {
         $SendAnonymousUsageData = $parameters['SendAnonymousUsageData']
     }
@@ -63,9 +62,6 @@ $Server = $Server.Replace(';', '')
 
 if ($null -eq $User -or '' -eq $User) {
     $User = 'AzSQLConnCheckerUser'
-}
-
-if ($null -eq $Password -or '' -eq $Password) {
     $Password = 'AzSQLConnCheckerPassword'
 }
 
@@ -570,6 +566,11 @@ try {
             Write-Host ' EncryptionProtocol:' $EncryptionProtocol -ForegroundColor Yellow
         }
         Write-Host
+        if ($User -ne 'AzSQLConnCheckerUser'){
+            Write-Host
+            $Credentials = Get-Credential -Message "You have configured '$User' as the username, please provide the password for this user." -User $User  
+            $Password = $Credentials.GetNetworkCredential().password
+            }
 
         if (!$Server -or $Server.Length -eq 0) {
             Write-Host 'The $Server parameter is empty' -ForegroundColor Red -BackgroundColor Yellow
