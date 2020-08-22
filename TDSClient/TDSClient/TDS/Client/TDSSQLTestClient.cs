@@ -182,7 +182,8 @@ namespace TDSClient.TDS.Client
 
             //tdsMessageBody.AddOption(TDSPreLoginOptionTokenType.Encryption, TDSEncryptionOption.EncryptOn);
             tdsMessageBody.AddOption(TDSPreLoginOptionTokenType.Encryption, this.EncryptionOption);
-            tdsMessageBody.AddOption(TDSPreLoginOptionTokenType.TraceID, new TDSClientTraceID(Guid.NewGuid().ToByteArray(), Guid.NewGuid().ToByteArray(), 0));
+            Guid guid = new Guid(1, 2, 3, 0, 1, 2, 3, 4, 5, 6, 7);
+            tdsMessageBody.AddOption(TDSPreLoginOptionTokenType.TraceID, new TDSClientTraceID(guid.ToByteArray(), guid.ToByteArray(), 0));
             tdsMessageBody.Terminate();
 
             this.TdsCommunicator.SendTDSMessage(tdsMessageBody);

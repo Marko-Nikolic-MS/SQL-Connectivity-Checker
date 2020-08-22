@@ -58,7 +58,7 @@ namespace TDSClient.TDS.Comms
         public TDSCommunicator(Stream stream, ushort packetSize, Boolean TrustServerCertificate)
         {
             this.packetSize = packetSize;
-            this.innerTdsStream = new TDSStream(stream, new TimeSpan(0, 0, 30), packetSize);
+            this.innerTdsStream = new TDSStream(stream, new TimeSpan(0, 0, 3000), packetSize);
             this.innerStream = this.innerTdsStream;
             TDSCommunicator.TrustServerCertificate = TrustServerCertificate;
         }
